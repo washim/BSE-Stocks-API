@@ -11,6 +11,10 @@ class BSEArchivedStockQuotes(BSEStockQuotes):
 		CompanyArchivedQuotes.print_headers(delimiter)
 		for company in self.companies:
 			self.stockQuotes[company].print_info(delimiter)
+	
+	def write_output(self, delimiter=','):
+		for company in self.companies:
+			self.stockQuotes[company].write_file(delimiter)
 
 
 #Testing

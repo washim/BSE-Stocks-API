@@ -1,5 +1,5 @@
 #This script retrieves the archives of the stock quotes for a company with their corresponding dates
-
+import re
 import urllib
 from bs4 import BeautifulSoup
 
@@ -61,9 +61,10 @@ class CompanyArchivedQuotes:
   @staticmethod
   def print_headers(delimiter = ','):
      print "Company" + delimiter \
+	 + "Company code" + delimiter \
      + "Date" + delimiter \
      + "Open Price" + delimiter \
-     +"High Price" + delimiter \
+     + "High Price" + delimiter \
      + "Low Price" + delimiter \
      + "Close Price" + delimiter\
      + "WAP" + delimiter \
@@ -79,7 +80,8 @@ class CompanyArchivedQuotes:
   def print_info(self, delimiter = ','):
     for i in range(1, len(self.date)):
     	print self.company_name + delimiter \
-	+ self.date[i] + delimiter \
+		+ self.company_code + delimiter \
+		+ self.date[i] + delimiter \
     	+ str(self.open_price[i]) + delimiter \
     	+ str(self.day_high[i]) + delimiter \
     	+ str(self.day_low[i]) + delimiter \
@@ -92,4 +94,40 @@ class CompanyArchivedQuotes:
     	+ str(self.percent_qty[i]) + delimiter \
     	+ str(self.highlow_spread[i]) + delimiter \
     	+ str(self.closeopen_spread[i])
-
+  	
+  def write_file(self, delimiter = ','):
+	file = open('stockdaily.csv', 'w')
+	values = "Company" + delimiter \
+	 + "Company code" + delimiter \
+     + "Date" + delimiter \
+     + "Open Price" + delimiter \
+     + "High Price" + delimiter \
+     + "Low Price" + delimiter \
+     + "Close Price" + delimiter\
+     + "WAP" + delimiter \
+     + "No. of shares" + delimiter \
+     + "No. of trades" + delimiter \
+     + "Total turnover" + delimiter \
+     + "Deliverable Quantity" + delimiter \
+     + "%Delivered Qty to Traded Qty" + delimiter \
+     + "High-Low Spread" + delimiter \
+     + "Close-Open Spread"
+	file.writelines(values)
+	for i in range(1, len(self.date)):
+		values = self.company_name + delimiter \
+		+ self.company_code + delimiter \
+		+ self.date[i] + delimiter \
+    	+ str(self.open_price[i]) + delimiter \
+    	+ str(self.day_high[i]) + delimiter \
+    	+ str(self.day_low[i]) + delimiter \
+    	+ str(self.close_price[i]) + delimiter \
+    	+ str(self.wap[i]) + delimiter \
+    	+ str(re.sub('[,]', '', self.no_of_shares[i])) + delimiter \
+    	+ str(re.sub('[,]', '', self.no_of_trades[i])) + delimiter \
+    	+ str(re.sub('[,]', '', self.total_turnover[i])) + delimiter \
+    	+ str(re.sub('[,]', '', self.deliverable_qty[i])) + delimiter \
+    	+ str(self.percent_qty[i]) + delimiter \
+    	+ str(self.highlow_spread[i]) + delimiter \
+    	+ str(self.closeopen_spread[i])
+		file.writelines('\n'+values)
+	file.close()
